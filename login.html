@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: 50% 50%;
+            animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+            will-change: transform, opacity;
+        }
+
+        .particle::before {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .particle:nth-child(1)::before {
+            width: 160px;
+            height: 160px;
+            top: 20%;
+            left: 20%;
+            animation: float1 12s infinite;
+        }
+
+        .particle:nth-child(2)::before {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 70%;
+            animation: float2 18s infinite;
+        }
+
+        .particle:nth-child(3)::before {
+            width: 180px;
+            height: 180px;
+            top: 10%;
+            left: 60%;
+            animation: float3 15s infinite;
+        }
+
+        .particle:nth-child(4)::before {
+            width: 140px;
+            height: 140px;
+            top: 70%;
+            left: 25%;
+            animation: float4 20s infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(100px, 50px) rotate(90deg) scale(1.2); }
+            50% { transform: translate(50px, 100px) rotate(180deg) scale(0.8); }
+            75% { transform: translate(-50px, 50px) rotate(270deg) scale(1.1); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(-80px, -40px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(40px, -80px) rotate(240deg) scale(0.9); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            50% { transform: translate(-60px, 60px) rotate(180deg) scale(1.2); }
+        }
+
+        @keyframes float4 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(70px, -70px) rotate(90deg) scale(0.8); }
+            66% { transform: translate(-70px, -40px) rotate(270deg) scale(1.1); }
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(8px);
+            animation: containerAppear 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        @keyframes containerAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            animation: slideInFade 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) 0.2s both;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            margin: 10px 0;
+            animation: slideInFade 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) both;
+            will-change: transform, opacity;
+        }
+
+        input:nth-child(1) { animation-delay: 0.3s; }
+        input:nth-child(2) { animation-delay: 0.4s; }
+        select { animation-delay: 0.5s; }
+
+        @keyframes slideInFade {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            animation: slideInFade 0.5s cubic-bezier(0.4, 0.0, 0.2, 1) 0.6s both;
+            will-change: transform;
+            overflow: hidden;
+            position: relative;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.6s ease-out;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active::after {
+            transform: translate(-50%, -50%) scale(1);
+            transition: transform 0s;
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            margin: -12px 0 0 -12px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+    </style>
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button');
+            const form = event.target;
+            
+            button.classList.add('loading');
+            button.textContent = '';
+            
+            setTimeout(() => {
+                const role = form.querySelector("select[name='role']").value;
+                if (role === "participant") {
+                    window.location.href = "participant.html";
+                } else if (role === "organizer") {
+                    window.location.href = "organizer.html";
+                } else if (role === "judge") {
+                    window.location.href = "judge.html";
+                } else {
+                    alert("Please select a role");
+                    button.classList.remove('loading');
+                    button.textContent = 'Login';
+                }
+            }, 1000);
+        }
+
+        // Add ripple effect to button
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button');
+            button.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const ripple = document.createElement('div');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form onsubmit="handleLogin(event)">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="participant">Participant</option>
+                <option value="organizer">Organizer</option>
+                <option value="judge">Judge</option>
+            </select>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

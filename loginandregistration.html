@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a6fe4;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .loading {
+            position: relative;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="login">Login</div>
+            <div class="tab" data-tab="register">Register</div>
+        </div>
+        
+        <div class="form-container">
+            <!-- Login Form -->
+            <form id="loginForm" class="active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                    <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                    <div class="error-message"></div>
+                </div>
+                <button type="submit">Login</button>
+                <div class="success-message"></div>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required>
+                    <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                    <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                    <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                    <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" required>
+                        <option value="">Select Role</option>
+                        <option value="participant">Participant</option>
+                        <option value="organizer">Organizer</option>
+                        <option value="judge">Judge</option>
+                    </select>
+                    <div class="error-message"></div>
+                </div>
+                <button type="submit">Register</button>
+                <div class="success-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const forms = {
+            login: document.getElementById('loginForm'),
+            register: document.getElementById('registerForm')
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Show corresponding form
+                const formType = tab.dataset.tab;
+                forms.login.style.display = formType === 'login' ? 'block' : 'none';
+                forms.register.style.display = formType === 'register' ? 'block' : 'none';
+            });
+        });
+
+        // Form validation and submission
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function showError(input, message) {
+            const errorDiv = input.nextElementSibling;
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function clearError(input) {
+            const errorDiv = input.nextElementSibling;
+            errorDiv.style.display = 'none';
+        }
+
+        function showSuccess(form, message) {
+            const successDiv = form.querySelector('.success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Login form handling
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail');
+            const password = document.getElementById('loginPassword');
+            let isValid = true;
+
+            // Validate email
+            if (!validateEmail(email.value)) {
+                showError(email, 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearError(email);
+            }
+
+            // Validate password
+            if (!validatePassword(password.value)) {
+                showError(password, 'Password must be at least 8 characters long');
+                isValid = false;
+            } else {
+                clearError(password);
+            }
+
+            if (isValid) {
+                const button = loginForm.querySelector('button');
+                button.classList.add('loading');
+
+                // Simulate API call
+                setTimeout(() => {
+                    button.classList.remove('loading');
+                    showSuccess(loginForm, 'Login successful!');
+                    // Redirect to dashboard
+                    // window.location.href = '/dashboard';
+                }, 1500);
+            }
+        });
+
+        // Registration form handling
+        const registerForm = document.getElementById('registerForm');
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('registerEmail');
+            const password = document.getElementById('registerPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const role = document.getElementById('role');
+            let isValid = true;
+
+            // Validate full name
+            if (fullName.value.trim().length < 2) {
+                showError(fullName, 'Please enter your full name');
+                isValid = false;
+            } else {
+                clearError(fullName);
+            }
+
+            // Validate email
+            if (!validateEmail(email.value)) {
+                showError(email, 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearError(email);
+            }
+
+            // Validate password
+            if (!validatePassword(password.value)) {
+                showError(password, 'Password must be at least 8 characters long');
+                isValid = false;
+            } else {
+                clearError(password);
+            }
+
+            // Validate confirm password
+            if (password.value !== confirmPassword.value) {
+                showError(confirmPassword, 'Passwords do not match');
+                isValid = false;
+            } else {
+                clearError(confirmPassword);
+            }
+
+            // Validate role
+            if (!role.value) {
+                showError(role, 'Please select a role');
+                isValid = false;
+            } else {
+                clearError(role);
+            }
+
+            if (isValid) {
+                const button = registerForm.querySelector('button');
+                button.classList.add('loading');
+
+                // Simulate API call
+                setTimeout(() => {
+                    button.classList.remove('loading');
+                    showSuccess(registerForm, 'Registration successful!');
+                    // Redirect to dashboard
+                    // window.location.href = '/dashboard';
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>

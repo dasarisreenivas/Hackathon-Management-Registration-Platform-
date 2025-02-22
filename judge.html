@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMinds - Judge Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #e53e3e;
+        }
+
+        body {
+            background-color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Submission Grid */
+        .submissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .submission-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .submission-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submission-content {
+            padding: 1.5rem;
+        }
+
+        .criteria-list {
+            margin: 1rem 0;
+        }
+
+        .criteria-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .score-input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 1rem 0;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+        }
+
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-reviewed {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Filter Section */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .submissions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">CodeMinds Judge Dashboard</a>
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span>Judge Name</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Project Evaluations</h1>
+                <div class="filters">
+                    <select class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="ai">AI/ML</option>
+                        <option value="web">Web Development</option>
+                        <option value="mobile">Mobile Apps</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending Review</option>
+                        <option value="reviewed">Reviewed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Submissions</h3>
+                    <p>24</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Reviewed</h3>
+                    <p>16</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <p>8</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Score</h3>
+                    <p>8.5/10</p>
+                </div>
+            </div>
+
+            <div class="submissions-grid">
+                <div class="submission-card">
+                    <div class="submission-header">
+                        <h3>AI Assistant</h3>
+                        <span class="status-badge status-pending">Pending Review</span>
+                    </div>
+                    <div class="submission-content">
+                        <p><strong>Team:</strong> Team Alpha</p>
+                        <p><strong>Category:</strong> AI/ML</p>
+                        <div class="criteria-list">
+                            <div class="criteria-item">
+                                <span>Innovation</span>
+                                <input type="number" class="score-input" min="0" max="10" placeholder="/10">
+                            </div>
+                            <div class="criteria-item">
+                                <span>Technical Complexity</span>
+                                <input type="number" class="score-input" min="0" max="10" placeholder="/10">
+                            </div>
+                            <div class="criteria-item">
+                                <span>Practicality</span>
+                                <input type="number" class="score-input" min="0" max="10" placeholder="/10">
+                            </div>
+                            <div class="criteria-item">
+                                <span>Presentation</span>
+                                <input type="number" class="score-input" min="0" max="10" placeholder="/10">
+                            </div>
+                        </div>
+                        <textarea class="feedback-textarea" placeholder="Enter your feedback here..."></textarea>
+                        <button class="btn btn-primary">Submit Evaluation</button>
+                    </div>
+                </div>
+
+                <div class="submission-card">
+                    <div class="submission-header">
+                        <h3>Smart Healthcare</h3>
+                        <span class="status-badge status-reviewed">Reviewed</span>
+                    </div>
+                    <div class="submission-content">
+                        <p><strong>Team:</strong> Team Beta</p>
+                        <p><strong>Category:</strong> Web Development</p>
+                        <div class="criteria-list">
+                            <div class="criteria-item">
+                                <span>Innovation</span>
+                                <input type="number" class="score-input" value="9" min="0" max="10" disabled>
+                            </div>
+                            <div class="criteria-item">
+                                <span>Technical Complexity</span>
+                                <input type="number" class="score-input" value="8" min="0" max="10" disabled>
+                            </div>
+                            <div class="criteria-item">
+                                <span>Practicality</span>
+                                <input type="number" class="score-input" value="9" min="0" max="10" disabled>
+                            </div>
+                            <div class="criteria-item">
+                                <span>Presentation</span>
+                                <input type="number" class="score-input" value="8" min="0" max="10" disabled>
+                            </div>
+                        </div>
+                        <textarea class="feedback-textarea" disabled>Excellent project with strong practical applications. The technical implementation is solid and the presentation was clear and engaging.</textarea>
+                        <button class="btn btn-outline">Edit Evaluation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Project Submission</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container */
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            left: 20px;
+            margin-right: 5px;
+            margin-left: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #444;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Form Inputs */
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+            background: #f8f9ff;
+            color: #333;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #764ba2;
+            box-shadow: 0px 0px 8px rgba(102, 126, 234, 0.5);
+            background: white;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* Submit Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out, transform 0.2s;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #5a6fe4, #6b42a0);
+            transform: scale(1.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                left: 0;
+                margin-right: 0;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🚀 Hackathon Project Submission</h2>
+        <form id="submissionForm" enctype="multipart/form-data">
+            
+            <!-- Basic Information -->
+            <label for="name">Full Name</label>
+            <input type="text" id="name" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required>
+
+            <label for="team">Team Name (Optional)</label>
+            <input type="text" id="team">
+
+            <!-- Project Details -->
+            <label for="projectTitle">Project Title</label>
+            <input type="text" id="projectTitle" required>
+
+            <label for="description">Project Description</label>
+            <textarea id="description" rows="4" required></textarea>
+
+            <label for="tech">Technologies Used</label>
+            <textarea id="tech" rows="3" placeholder="E.g., HTML, CSS, JavaScript, Node.js, MongoDB" required></textarea>
+
+            <label for="github">GitHub Repository Link</label>
+            <input type="url" id="github" placeholder="https://github.com/yourproject" required>
+
+            <label for="demo">Demo Video Link (YouTube, etc.)</label>
+            <input type="url" id="demo" placeholder="https://youtube.com/demo">
+
+            <button type="submit">Submit Project</button>
+        </form>
+    </div>
+
+</body>
+</html>

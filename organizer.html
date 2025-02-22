@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMinds - Hackathon Organization Platform</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #14b8a6;
+            --accent: #f472b6;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 1rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-grid {
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .participants-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .participant-card {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .timeline {
+            margin-top: 2rem;
+        }
+
+        .event {
+            background: var(--background);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .announcement-form {
+            margin-top: 1rem;
+        }
+
+        .announcement-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .announcement-form button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .announcements {
+            margin-top: 1rem;
+        }
+
+        .announcement {
+            background: var(--background);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">CodeMinds</a>
+            <div class="nav-links">
+                <a href="#dashboard">Dashboard</a>
+                <a href="#participants">Participants</a>
+                <a href="#schedule">Schedule</a>
+                <a href="#projects">Projects</a>
+                <a href="#resources">Resources</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Organize Amazing Hackathons</h1>
+            <p>Everything you need to run successful hackathons - from registration to project submission</p>
+            <a href="conductHackothon.html" class="cta-button">Start Organizing</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Participant Management</h3>
+                <p>Easily manage registrations, teams, and communications with participants.</p>
+            </div>
+          
+            <div class="feature-card">
+                <h3>Real-time Updates</h3>
+                <p>Keep everyone informed with announcements, schedule changes, and important updates.</p>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h2><a>Dashboard</h2>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <h4>Participants</h4>
+                        <div class="number">156</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Teams</h4>
+                        <div class="number">32</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Projects</h4>
+                        <div class="number">28</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Mentors</h4>
+                        <div class="number">12</div>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <h3>Schedule</h3>
+                    <div id="timeline"></div>
+                </div>
+
+                <div class="participants-list">
+                    <h3>Recent Registrations</h3>
+                    <div class="participant-card">
+                        <div>John Doe</div>
+                        <div>Full Stack Developer</div>
+                    </div>
+                    <div class="participant-card">
+                        <div>Jane Smith</div>
+                        <div>UI/UX Designer</div>
+                    </div>
+                    <div class="participant-card">
+                        <div>Mike Johnson</div>
+                        <div>Data Scientist</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Announcements</h3>
+                <div class="announcement-form">
+                    <input type="text" placeholder="New announcement...">
+                    <button onclick="addAnnouncement()">Post</button>
+                </div>
+                <div class="announcements" id="announcements-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CodeMinds. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample data
+        let events = [
+            {
+                id: 1,
+                title: 'Registration Opens',
+                startTime: new Date(Date.now() + 1000 * 60 * 60),
+                endTime: new Date(Date.now() + 1000 * 60 * 60 * 2)
+            },
+            {
+                id: 2,
+                title: 'Team Formation',
+                startTime: new Date(Date.now() + 1000 * 60 * 60 * 3),
+                endTime: new Date(Date.now() + 1000 * 60 * 60 * 4)
+            },
+            {
+                id: 3,
+                title: 'Hacking Begins',
+                startTime: new Date(Date.now() + 1000 * 60 * 60 * 5),
+                endTime: new Date(Date.now() + 1000 * 60 * 60 * 29)
+            }
+        ];
+
+        let announcements = [
+            {
+                id: 1,
+                text: 'Welcome to CodeMinds 2025! Registration is now open.',
+                timestamp: new Date()
+            }
+        ];
+
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            const now = new Date();
+            
+            events.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = 'event';
+                
+                if (event.endTime < now) {
+                    eventEl.style.opacity = '0.7';
+                } else if (event.startTime <= now && event.endTime >= now) {
+                    eventEl.style.borderLeftColor = 'var(--success)';
+                }
+                
+                eventEl.innerHTML = `
+                    <h4>${event.title}</h4>
+                    <div>${event.startTime.toLocaleTimeString()} - ${event.endTime.toLocaleTimeString()}</div>
+                `;
+                
+                timeline.appendChild(eventEl);
+            });
+        }
+
+        function renderAnnouncements() {
+            const announcementsList = document.getElementById('announcements-list');
+            announcementsList.innerHTML = '';
+            
+            announcements.sort((a, b) => b.timestamp - a.timestamp)
+                .forEach(announcement => {
+                    const announcementEl = document.createElement('div');
+                    announcementEl.className = 'announcement';
+                    announcementEl.innerHTML = `
+                        <div>${announcement.text}</div>
+                        <small>${announcement.timestamp.toLocaleString()}</small>
+                    `;
+                    announcementsList.appendChild(announcementEl);
+                });
+        }
+
+        function addAnnouncement() {
+            const input = document.querySelector('.announcement-form input');
+            const text = input.value.trim();
+            
+            if (text) {
+                announcements.push({
+                    id: announcements.length + 1,
+                    text: text,
+                    timestamp: new Date()
+                });
+                
+                input.value = '';
+                renderAnnouncements();
+            }
+        }
+
+        // Update timeline every minute
+        setInterval(renderTimeline, 60000);
+
+        // Initial render
+        renderTimeline();
+        renderAnnouncements();
+    </script>
+</body>
+</html>

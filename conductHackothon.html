@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackHub - Hackathon Organization Platform</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #14b8a6;
+            --accent: #f472b6;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .hackathon-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .hackathon-section h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .hackathon-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .hackathon-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .hackathon-form button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .hackathon-form button:hover {
+            background: var(--primary-dark);
+        }
+
+        .hackathon-list {
+            margin-top: 1rem;
+        }
+
+        .hackathon-item {
+            background: var(--background);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">HackHub</a>
+            <div class="nav-links">
+                <a href="Eventscheduler.html">Dashboard</a>
+                <a href="#participants">Participants</a>
+                <a href="#schedule">Schedule</a>
+                <a href="#projects">Projects</a>
+                <a href="#resources">Resources</a>
+                <a href="#new-hackathon">New Hackathon</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hackathon-section" id="new-hackathon">
+            <h2>Conduct a New Hackathon</h2>
+            <form class="hackathon-form" onsubmit="addHackathon(event)">
+                <input type="text" id="hackathon-name" placeholder="Hackathon Name" required>
+                <input type="date" id="hackathon-date" required>
+                <input type="text" id="hackathon-location" placeholder="Location" required>
+                <button type="submit">Create Hackathon</button>
+            </form>
+            <div class="hackathon-list" id="hackathon-list"></div>
+        </section>
+    </main>
+
+    <script>
+        let hackathons = [];
+
+        function addHackathon(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('hackathon-name').value;
+            const date = document.getElementById('hackathon-date').value;
+            const location = document.getElementById('hackathon-location').value;
+            
+            if (name && date && location) {
+                hackathons.push({ name, date, location });
+                document.getElementById('hackathon-name').value = '';
+                document.getElementById('hackathon-date').value = '';
+                document.getElementById('hackathon-location').value = '';
+                renderHackathons();
+            }
+        }
+
+        function renderHackathons() {
+            const list = document.getElementById('hackathon-list');
+            list.innerHTML = '';
+            hackathons.forEach(hackathon => {
+                const div = document.createElement('div');
+                div.className = 'hackathon-item';
+                div.innerHTML = <strong>${hackathon.name}</strong><br>Date: ${hackathon.date}<br>Location: ${hackathon.location};
+                list.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>

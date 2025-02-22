@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Platform</title>
+    <style>
+        /* Root variables and basic styles */
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #14b8a6;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Animation Keyframes */
+        @keyframes floatingBubbles {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes rippleEffect {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.3);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes pulseBackground {
+            0% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Enhanced body and background */
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background elements */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::before {
+            background: radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.1) 0%, transparent 50%);
+            animation: pulseBackground 10s ease-in-out infinite;
+        }
+
+        /* Bubble styling */
+        .bubble {
+            position: fixed;
+            bottom: -100px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: floatingBubbles 15s linear infinite;
+        }
+
+        /* Navigation styles */
+        nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Main content styles */
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .timeline-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .timeline, .announcements {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Enhanced event cards */
+        .event {
+            background: white;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .event::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(79, 70, 229, 0.1) 50%,
+                transparent 100%
+            );
+            animation: shimmer 3s infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .event:hover::before {
+            opacity: 1;
+        }
+
+        .event.current {
+            animation: rippleEffect 2s infinite;
+        }
+
+        .event h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .event-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        /* Enhanced announcement cards */
+        .announcement {
+            background: var(--background);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .announcement::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(79, 70, 229, 0.1) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .announcement:hover::after {
+            transform: translateX(100%);
+        }
+
+        /* Enhanced participate button */
+        .participate-button {
+            
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+
+        
+    
+        }
+
+        .participate-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        
+            
+        }
+        
+
+        .participate-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .timeline-container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .chat-messages {
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            background: var(--background);
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            max-width: 80%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--secondary);
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chat-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your existing HTML structure -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="logo">CodeMinds</a>
+            <div class="nav-links">
+                <a href="#schedule">Schedule</a>
+                <a href="#announcements">Announcements</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="hero">
+            <h1>Welcome to CodeMinds</h1>
+            <p>Stay updated with our latest events and announcements</p>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline">
+                <h2 class="section-title">Event Schedule</h2>
+                <div id="timeline"></div>
+            </div>
+
+            <div class="announcements">
+                <h2 class="section-title">Announcements</h2>
+                <div id="announcements-list"></div>
+
+
+            </div>
+            <div class="chatbox">
+                <div class="chat-header">Live Chat</div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CodeMinds. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Bubble generator function
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            // Random size between 10 and 30px
+            const size = Math.random() * 20 + 10;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            // Random position
+            bubble.style.left = `${Math.random() * 100}vw`;
+            
+            // Random delay
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+            
+            document.body.appendChild(bubble);
+            
+            // Remove bubble after animation
+            bubble.addEventListener('animationend', () => {
+                bubble.remove();
+            });
+        }
+
+        // Event and announcement data
+        let events = [
+            {
+                id: 1,
+                title: 'Opening Ceremony',
+                startTime: new Date(Date.now() + 1000 * 60 * 60),
+                endTime: new Date(Date.now() + 1000 * 60 * 60 * 2),
+                location: 'Main Hall'
+            },
+            {
+                id: 2,
+                title: 'Workshop Session',
+                startTime: new Date(Date.now() + 1000 * 60 * 60 * 3),
+                endTime: new Date(Date.now() + 1000 * 60 * 60 * 4),
+                location: 'Room 101'
+            },
+            {
+                id: 3,
+                title: 'Networking Lunch',
+                startTime: new Date(Date.now() + 1000 * 60 * 60 * 5),
+                endTime: new Date(Date.now() + 1000 * 60 * 60 * 6),
+                location: 'Dining Hall'
+
+            }
+        ];
+
+        let announcements = [
+            {
+                id: 1,
+                text: 'Welcome to CodeMinds! Registration is now open.',
+                timestamp: new Date()
+            }
+        ];
+
+        function renderTimeline() {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            const now = new Date();
+            
+            events.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = 'event';
+                
+                if (event.endTime < now) {
+                    eventEl.classList.add('past');
+                } else if (event.startTime <= now && event.endTime >= now) {
+                    eventEl.classList.add('current');
+                }
+                
+                eventEl.innerHTML = `
+                    <h3>${event.title}</h3>
+                    <div class="event-meta">
+                        <div>Time: ${event.startTime.toLocaleTimeString()} - ${event.endTime.toLocaleTimeString()}</div>
+                        <div>Location: ${event.location}</div>
+                    </div>
+                    ${event.title === 'Networking Lunch' ? '<a href="form.html"><button class="participate-button">Participate</button></a>' : ''}
+                `;
+                
+                timeline.appendChild(eventEl);
+            });
+        }
+
+        function renderAnnouncements() {
+            const announcementsList = document.getElementById('announcements-list');
+            announcementsList.innerHTML = '';
+            
+            announcements.sort((a, b) => b.timestamp - a.timestamp)
+                .forEach(announcement => {
+                    const announcementEl = document.createElement('div');
+                    announcementEl.className = 'announcement';
+                    announcementEl.innerHTML = `
+                        <div class="announcement-text">${announcement.text}</div>
+                        <div class="announcement-meta">${announcement.timestamp.toLocaleString()}</div>
+                    `;
+                    announcementsList.appendChild(announcementEl);
+                });
+        }
+
+        // Create initial bubbles
+        for (let i = 0; i < 10; i++) {
+            createBubble();
+        }
+
+        // Create new bubbles periodically
+        setInterval(createBubble, 3000);
+
+        // Update timeline every minute
+        setInterval(renderTimeline, 60000);
+
+        // Initial render
+        renderTimeline();
+        renderAnnouncements();
+
+        function sendMessage() {
+            const input = document.getElementById("chatInput");
+            const messageText = input.value.trim();
+            if (messageText === "") return;
+
+            const messagesContainer = document.getElementById("chatMessages");
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", "user");
+            messageElement.textContent = messageText;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            input.value = "";
+        }
+    </script>
+</body>
+</html>

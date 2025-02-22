@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMinds - Complete Hackathon Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #e53e3e;
+        }
+
+        body {
+            background-color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            margin: 0 1rem;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--light);
+        }
+
+        .dropdown-content i {
+            margin-right: 10px;
+            color: var(--primary);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 8rem 0 4rem;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Feature Cards */
+        .features {
+            margin: 4rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Live Events Section */
+        .live-events {
+            background: #f8fafc;
+            padding: 4rem 0;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .event-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+        }
+
+        .event-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 5px;
+        }
+
+        /* Team Formation Section */
+        .team-section {
+            padding: 4rem 0;
+            background: #f8fafc;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* Submission Section */
+        .submission-section {
+            padding: 4rem 0;
+        }
+
+        .submission-process {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+
+        /* Leaderboard Section */
+        .leaderboard {
+            padding: 4rem 0;
+            background: #f8fafc;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .leaderboard-table thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        .leaderboard-table tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">CodeMinds</a>
+            <div class="nav-links">
+                <a href="#events">Events</a>
+                <a href="#teams">Teams</a
+                <a href="#submissions">Submissions</a>
+                <a href="#leaderboard">Leaderboard</a>
+            </div>
+            <div>
+                <div class="dropdown">
+                    <a href="#" class="btn btn-primary">
+                        Login <i class="fas fa-chevron-down" style="margin-left: 5px;"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="login.html">
+                            <i class="fas fa-user"></i>
+                            Login as Participant
+                        </a>
+                        <a href="login.html">
+                            <i class="fas fa-gavel"></i>
+                            Login as Judge
+                        </a>
+                        <a href="login.html">
+                            <i class="fas fa-crown"></i>
+                            Login as Organizer
+                        </a>
+                    </div>
+                </div>
+                <a href="http://127.0.0.1:5500/loginandregistration.html" class="btn btn-outline">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to CodeMinds</h1>
+            <p>Your all-in-one platform for hackathons, team collaboration, and innovation</p>
+            <a href="#" class="btn btn-primary">Get Started</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Platform Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Team Formation</h3>
+                    <p>Create or join teams, find teammates with complementary skills, and collaborate effectively.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Project Submission</h3>
+                    <p>Submit your projects with ease, including code repositories, demos, and documentation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Real-time Chat</h3>
+                    <p>Communicate with your team and other participants through our integrated chat system.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Live Judging</h3>
+                    <p>Real-time scoring and feedback from judges during the evaluation phase.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="events" class="live-events">
+        <div class="container">
+            <h2>Live Events</h2>
+            <div class="event-card">
+                <div class="event-header">
+                    <h3>AI Innovation Challenge</h3>
+                    <span>Live Now</span>
+                </div>
+                <div class="event-content">
+                    <p>Build cutting-edge AI solutions for real-world problems.</p>
+                    <div class="event-stats">
+                        <div class="stat-card">
+                            <h4>50+</h4>
+                            <p>Teams</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>24h</h4>
+                            <p>Remaining</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>$10k</h4>
+                            <p>Prize Pool</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="teams" class="team-section">
+        <div class="container">
+            <h2>Featured Teams</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Team Alpha</h3>
+                    <p>Looking for UI/UX Designer</p>
+                    <a href="#" class="btn btn-outline">Join Team</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="submissions" class="submission-section">
+        <div class="container">
+            <h2>Project Submission Process</h2>
+            <div class="submission-process">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Register Team</h3>
+                    <p>Create or join a team for the hackathon</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Build Project</h3>
+                    <p>Develop your solution during the hackathon</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Submit</h3>
+                    <p>Upload your project with all required details</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Present</h3>
+                    <p>Showcase your solution to the judges</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="leaderboard" class="leaderboard">
+        <div class="container">
+            <h2>Live Leaderboard</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Team</th>
+                        <th>Project</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
